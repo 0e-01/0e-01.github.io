@@ -10,7 +10,7 @@ body {
 }
 
 .room {
-  width: 360px;
+  width: 380px;
   height: 300px;
   background: #fff;
   border: 3px solid #333;
@@ -18,44 +18,120 @@ body {
   position: relative;
 }
 
-/* 天線寶寶圖片 */
+/* ===== 天線寶寶 ===== */
 .pet {
-  width: 120px;
   position: absolute;
-  left: 120px;
-  top: 80px;
-  transition: filter 0.3s;
+  left: 150px;
+  top: 70px;
 }
 
-.coat { filter: brightness(0.9) saturate(0.8); }
-.party { filter: saturate(1.5) brightness(1.1); }
+/* 天線 */
+.antenna {
+  width: 6px;
+  height: 30px;
+  background: #333;
+  margin: auto;
+  border-radius: 5px;
+}
 
-/* 家具 */
-.chair {
-  width: 40px;
+/* 頭 */
+.head {
+  width: 60px;
+  height: 55px;
+  background: #8fd694;
+  border-radius: 50%;
+  position: relative;
+  margin: auto;
+}
+
+/* 眼睛 */
+.eye {
+  width: 8px;
+  height: 8px;
+  background: #000;
+  border-radius: 50%;
+  position: absolute;
+  top: 18px;
+}
+.eye.left { left: 16px; }
+.eye.right { right: 16px; }
+
+/* 嘴巴 */
+.mouth {
+  width: 18px;
+  height: 10px;
+  border-bottom: 3px solid #333;
+  border-radius: 0 0 20px 20px;
+  position: absolute;
+  top: 32px;
+  left: 21px;
+}
+
+/* 身體 */
+.body {
+  width: 70px;
+  height: 70px;
+  background: #8fd694;
+  border-radius: 35px;
+  margin: -5px auto 0;
+}
+
+/* 衣服顏色 */
+.normal .head,
+.normal .body { background: #8fd694; }
+
+.blue .head,
+.blue .body { background: #6fa8dc; }
+
+.pink .head,
+.pink .body { background: #f4cccc; }
+
+.yellow .head,
+.yellow .body { background: #ffd966; }
+
+/* ===== 家具 ===== */
+/* 窗戶 */
+.window {
+  width: 60px;
   height: 40px;
-  border: 2px solid #333;
+  border: 3px solid #333;
   position: absolute;
-  bottom: 10px;
+  top: 20px;
   left: 20px;
+  background: linear-gradient(#cfe2f3 50%, #9fc5e8 50%);
 }
 
-.sofa {
-  width: 90px;
-  height: 30px;
-  border: 2px solid #333;
+/* 床 */
+.bed {
+  width: 120px;
+  height: 40px;
+  border: 3px solid #333;
   position: absolute;
-  bottom: 10px;
-  right: 20px;
+  bottom: 20px;
+  left: 20px;
+  background: #fce5cd;
 }
 
-.plant {
-  width: 20px;
-  height: 30px;
-  border-left: 4px solid green;
+/* 桌子 */
+.table {
+  width: 60px;
+  height: 35px;
+  border: 3px solid #333;
+  position: absolute;
+  bottom: 20px;
+  right: 30px;
+  background: #ead1dc;
+}
+
+/* 地毯 */
+.rug {
+  width: 100px;
+  height: 40px;
+  background: #d9ead3;
+  border-radius: 20px;
   position: absolute;
   bottom: 10px;
-  left: 110px;
+  left: 140px;
 }
 
 /* 面板 */
@@ -75,6 +151,3 @@ button {
   font-size: 40px;
   cursor: pointer;
 }
-
-  
-
