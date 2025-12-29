@@ -10,10 +10,7 @@
 <div class="money">💰 金錢：$<span id="money">30</span></div>
 
 <div class="room">
-  <div id="pet" class="pet default">
-    <div class="antenna"></div>
-    <div class="face"></div>
-  </div>
+  <img id="pet" src="pet.png" class="pet">
 
   <!-- 簡筆畫家具 -->
   <div class="chair"></div>
@@ -23,18 +20,18 @@
 
 <div class="panel">
   <h3>🍽️ 餵食</h3>
-  <button onclick="feed(5)">🍍 鳳梨 $5</button>
-  <button onclick="feed(15)">🍜 鐵板麵 $15</button>
-  <button onclick="feed(15)">🐙 章魚燒 $15</button>
-  <button onclick="feed(10)">🥤 雪碧 $10</button>
-  <button onclick="feed(20)">🍰 提拉米蘇 $20</button>
+  <button onclick="feed(5, 'pineapple')">🍍 鳳梨 $5</button>
+  <button onclick="feed(15, 'noodle')">🍜 鐵板麵 $15</button>
+  <button onclick="feed(15, 'takoyaki')">🐙 章魚燒 $15</button>
+  <button onclick="feed(10, 'sprite')">🥤 雪碧 $10</button>
+  <button onclick="feed(20, 'tiramisu')">🍰 提拉米蘇 $20</button>
+  <button onclick="feed(10, 'dumpling')">🥟 水餃 $10</button>
 </div>
 
 <div class="panel">
   <h3>👕 換衣服</h3>
-  <button onclick="changeClothes('default')">日常</button>
+  <button onclick="changeClothes('normal')">日常</button>
   <button onclick="changeClothes('coat')">外套</button>
-  <button onclick="changeClothes('dress')">洋裝</button>
   <button onclick="changeClothes('party')">派對</button>
 </div>
 
@@ -43,3 +40,4 @@
 <script src="script.js"></script>
 </body>
 </html>
+
