@@ -10,12 +10,22 @@
 <div class="money">💰 金錢：$<span id="money">30</span></div>
 
 <div class="room">
-  <img id="pet" src="pet.png" class="pet">
+  <!-- 天線寶寶（純 CSS） -->
+  <div id="pet" class="pet normal">
+    <div class="antenna"></div>
+    <div class="head">
+      <div class="eye left"></div>
+      <div class="eye right"></div>
+      <div class="mouth"></div>
+    </div>
+    <div class="body"></div>
+  </div>
 
-  <!-- 簡筆畫家具 -->
-  <div class="chair"></div>
-  <div class="sofa"></div>
-  <div class="plant"></div>
+  <!-- 家具 -->
+  <div class="window"></div>
+  <div class="bed"></div>
+  <div class="table"></div>
+  <div class="rug"></div>
 </div>
 
 <div class="panel">
@@ -31,8 +41,9 @@
 <div class="panel">
   <h3>👕 換衣服</h3>
   <button onclick="changeClothes('normal')">日常</button>
-  <button onclick="changeClothes('coat')">外套</button>
-  <button onclick="changeClothes('party')">派對</button>
+  <button onclick="changeClothes('blue')">藍色</button>
+  <button onclick="changeClothes('pink')">粉色</button>
+  <button onclick="changeClothes('yellow')">黃色</button>
 </div>
 
 <div class="game-icon" onclick="openGame()">🎮</div>
@@ -40,4 +51,3 @@
 <script src="script.js"></script>
 </body>
 </html>
-
