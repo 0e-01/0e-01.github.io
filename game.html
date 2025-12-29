@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<title>天線寶寶小遊戲</title>
+<style>
+  body { text-align: center; }
+  canvas { border: 2px solid #333; }
+</style>
+</head>
+<body>
+
+<h2>⬆️跳 ⬇️蹲 ➡️前進</h2>
+<canvas id="game" width="400" height="200"></canvas>
+
+<script>
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+let y = 140;
+let vy = 0;
+let score = 0;
+let obstacleX = 400;
+
+document.addEventListener("keydown", e => {
+  if (e.key === "ArrowUp" && y === 140) vy = -10;
+});
+
+function loop() {
+  ctx.clearRect(0,0,400,200);
+
+  // 天線寶寶
+  ctx.fillStyle = "green";
+  ctx.fillRect(50, y, 20, 40);
+
+  // 跳躍
+  y += vy;
+  vy += 0.6;
+  if (y > 140) { y = 140; vy = 0; }
+
+  // 障礙
+  ctx.fillStyle = "black";
+  ctx.fillRect(obstacleX, 150, 20, 30);
+  obstacleX -= 4;
+
+  if (obstacleX < -20) {
+    obstacleX = 400;
+    score += 10;
+  }
+
+  ctx.fillText("分數：" + score, 10, 20);
+
+  // 碰撞
+  if (obstacleX < 70 && obstacleX > 50 && y > 120) {
+    endGame();
+    return;
+  }
+
+  requestAnimationFrame(loop);
+}
+
+function endGame() {
+  let money = Number(localStorage.getItem("money")) || 0;
+  let reward = Math.floor(score / 100) * 10;
+  money += reward;
+  localStorage.setItem("money", money);
+  alert("遊戲結束！獲得 $" + reward);
+  window.location.href = "index.html";
+}
+
+loop();
+</script>
+
+</body>
+</html>
