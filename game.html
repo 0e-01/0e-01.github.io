@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<h2>⬆️跳 ⬇️蹲 ➡️前進</h2>
+<h3>⬆️ 跳躍　避開毛毛蟲</h3>
 <canvas id="game" width="400" height="200"></canvas>
 
 <script>
@@ -20,38 +20,45 @@ const ctx = canvas.getContext("2d");
 let y = 140;
 let vy = 0;
 let score = 0;
-let obstacleX = 400;
+let obstacleX = 420;
 
 document.addEventListener("keydown", e => {
   if (e.key === "ArrowUp" && y === 140) vy = -10;
 });
 
+function drawCaterpillar(x) {
+  ctx.fillStyle = "green";
+  for (let i = 0; i < 4; i++) {
+    ctx.beginPath();
+    ctx.arc(x + i * 12, 155, 6, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
 function loop() {
   ctx.clearRect(0,0,400,200);
 
-  // 天線寶寶
-  ctx.fillStyle = "green";
+  // 天線寶寶（玩家）
+  ctx.fillStyle = "orange";
   ctx.fillRect(50, y, 20, 40);
 
-  // 跳躍
   y += vy;
   vy += 0.6;
   if (y > 140) { y = 140; vy = 0; }
 
-  // 障礙
-  ctx.fillStyle = "black";
-  ctx.fillRect(obstacleX, 150, 20, 30);
+  // 毛毛蟲
+  drawCaterpillar(obstacleX);
   obstacleX -= 4;
 
-  if (obstacleX < -20) {
-    obstacleX = 400;
+  if (obstacleX < -50) {
+    obstacleX = 420;
     score += 10;
   }
 
+  ctx.fillStyle = "#000";
   ctx.fillText("分數：" + score, 10, 20);
 
-  // 碰撞
-  if (obstacleX < 70 && obstacleX > 50 && y > 120) {
+  if (obstacleX < 80 && obstacleX > 40 && y > 120) {
     endGame();
     return;
   }
@@ -73,3 +80,6 @@ loop();
 
 </body>
 </html>
+
+  
+  
