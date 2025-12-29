@@ -10,7 +10,7 @@ body {
 }
 
 .room {
-  width: 350px;
+  width: 360px;
   height: 300px;
   background: #fff;
   border: 3px solid #333;
@@ -18,39 +18,17 @@ body {
   position: relative;
 }
 
-/* 天線寶寶 */
+/* 天線寶寶圖片 */
 .pet {
-  width: 80px;
-  height: 120px;
-  border-radius: 40px;
+  width: 120px;
   position: absolute;
-  left: 135px;
+  left: 120px;
   top: 80px;
+  transition: filter 0.3s;
 }
 
-.pet .antenna {
-  width: 6px;
-  height: 25px;
-  background: #333;
-  position: absolute;
-  top: -25px;
-  left: 37px;
-}
-
-.pet .face {
-  width: 40px;
-  height: 20px;
-  border-bottom: 3px solid #333;
-  position: absolute;
-  top: 50px;
-  left: 20px;
-}
-
-/* 衣服顏色 */
-.default { background: #8fd694; }
-.coat { background: #6fa8dc; }
-.dress { background: #f4cccc; }
-.party { background: #ffd966; }
+.coat { filter: brightness(0.9) saturate(0.8); }
+.party { filter: saturate(1.5) brightness(1.1); }
 
 /* 家具 */
 .chair {
@@ -63,7 +41,7 @@ body {
 }
 
 .sofa {
-  width: 80px;
+  width: 90px;
   height: 30px;
   border: 2px solid #333;
   position: absolute;
@@ -74,10 +52,10 @@ body {
 .plant {
   width: 20px;
   height: 30px;
-  border-left: 3px solid green;
+  border-left: 4px solid green;
   position: absolute;
   bottom: 10px;
-  left: 100px;
+  left: 110px;
 }
 
 /* 面板 */
@@ -86,7 +64,7 @@ body {
 }
 
 button {
-  margin: 3px;
+  margin: 4px;
 }
 
 /* 遊戲圖示 */
@@ -97,3 +75,6 @@ button {
   font-size: 40px;
   cursor: pointer;
 }
+
+  
+
