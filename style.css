@@ -1,0 +1,99 @@
+body {
+  font-family: sans-serif;
+  background: #eaf7ff;
+  text-align: center;
+}
+
+.money {
+  font-size: 20px;
+  margin: 10px;
+}
+
+.room {
+  width: 350px;
+  height: 300px;
+  background: #fff;
+  border: 3px solid #333;
+  margin: auto;
+  position: relative;
+}
+
+/* 天線寶寶 */
+.pet {
+  width: 80px;
+  height: 120px;
+  border-radius: 40px;
+  position: absolute;
+  left: 135px;
+  top: 80px;
+}
+
+.pet .antenna {
+  width: 6px;
+  height: 25px;
+  background: #333;
+  position: absolute;
+  top: -25px;
+  left: 37px;
+}
+
+.pet .face {
+  width: 40px;
+  height: 20px;
+  border-bottom: 3px solid #333;
+  position: absolute;
+  top: 50px;
+  left: 20px;
+}
+
+/* 衣服顏色 */
+.default { background: #8fd694; }
+.coat { background: #6fa8dc; }
+.dress { background: #f4cccc; }
+.party { background: #ffd966; }
+
+/* 家具 */
+.chair {
+  width: 40px;
+  height: 40px;
+  border: 2px solid #333;
+  position: absolute;
+  bottom: 10px;
+  left: 20px;
+}
+
+.sofa {
+  width: 80px;
+  height: 30px;
+  border: 2px solid #333;
+  position: absolute;
+  bottom: 10px;
+  right: 20px;
+}
+
+.plant {
+  width: 20px;
+  height: 30px;
+  border-left: 3px solid green;
+  position: absolute;
+  bottom: 10px;
+  left: 100px;
+}
+
+/* 面板 */
+.panel {
+  margin-top: 10px;
+}
+
+button {
+  margin: 3px;
+}
+
+/* 遊戲圖示 */
+.game-icon {
+  position: fixed;
+  right: 20px;
+  bottom: 20px;
+  font-size: 40px;
+  cursor: pointer;
+}
