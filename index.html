@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>十萬年前：洞穴冒險最終版</title>
+    <title>十萬年前：洞穴冒險最終修正版</title>
     <style>
         body {
             background: radial-gradient(circle, #4e3b2c 0%, #1a120b 100%);
@@ -16,22 +16,22 @@
         }
         .canvas-section { flex: 1.2; position: relative; }
         canvas {
-            background: #e6d5b8; border: 8px solid #3d2b1f; border-radius: 10px;
+            background: #f5f5dc; /* 純淨米白色 */
+            border: 8px solid #3d2b1f; border-radius: 10px;
             cursor: crosshair; display: block; width: 100%; height: auto; touch-action: none;
-            background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
         }
         .info-section { flex: 0.8; display: flex; flex-direction: column; justify-content: space-between; }
         h1 { margin: 0; color: #ffa500; font-size: 1.8em; text-shadow: 2px 2px #000; }
         
-        /* 工具箱樣式 */
+        /* 工具箱 */
         .toolbar {
             display: flex; gap: 10px; margin: 10px 0; padding: 10px;
             background: rgba(255,255,255,0.1); border-radius: 8px; align-items: center;
         }
-        .color-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; transition: 0.2s; }
-        .color-btn:hover { transform: scale(1.2); }
+        .color-btn { width: 30px; height: 30px; border-radius: 50%; border: 2px solid #fff; cursor: pointer; }
         .color-btn.active { border: 3px solid #ffa500; transform: scale(1.1); }
-        .eraser-btn { padding: 5px 10px; background: #eee; color: #333; border-radius: 5px; cursor: pointer; font-size: 0.8em; font-weight: bold; }
+        .eraser-btn { padding: 5px 12px; background: #fff; color: #333; border: 2px solid #333; border-radius: 5px; cursor: pointer; font-size: 0.8em; font-weight: bold; }
+        .eraser-btn.active { border-color: #ffa500; background: #e6d5b8; }
 
         #event-display {
             background: rgba(255, 255, 255, 0.1); padding: 15px; border-radius: 10px;
@@ -53,21 +53,20 @@
 
         <div class="info-section">
             <header>
-                <h1 id="title">🦴 洞穴手記</h1>
+                <h1>🦴 洞穴手記</h1>
                 <p id="progress-tag" style="margin:5px 0;">進度：召喚英雄</p>
             </header>
 
             <div class="toolbar">
-                <span>畫筆：</span>
+                <span>工具：</span>
                 <div class="color-btn active" style="background: #2b1d12;" onclick="setBrush('#2b1d12', 5, this)"></div>
                 <div class="color-btn" style="background: #d32f2f;" onclick="setBrush('#d32f2f', 5, this)"></div>
                 <div class="color-btn" style="background: #1976d2;" onclick="setBrush('#1976d2', 5, this)"></div>
-                <div class="color-btn" style="background: #388e3c;" onclick="setBrush('#388e3c', 5, this)"></div>
-                <div class="eraser-btn" onclick="setBrush('#e6d5b8', 20, this)">橡皮擦</div>
+                <div class="eraser-btn" id="eraser" onclick="setBrush('#f5f5dc', 25, this)">橡皮擦</div>
             </div>
             
             <div id="event-display">
-                <p id="event-text">【序章】<br>你穿越到了十萬年前的山洞...<br><br><strong>請先畫出你的「火柴人英雄」。</strong><br>(建議使用黑色，畫完他將陪伴你全程！)</p>
+                <p id="event-text">【序章】<br>你穿越到了十萬年前...<br><br><strong>請先畫出你的「火柴人英雄」。</strong><br>畫完他將陪伴你全程冒險！</p>
             </div>
 
             <div class="controls">
@@ -95,13 +94,12 @@
 
         const adventureList = [
             { q: "【第一關】", t: "一頭猛瑪象衝過來了！", a: "在英雄身邊畫出【長矛】或【陷阱】！" },
-            { q: "【第二關】", t: "天黑了，狼群在靠近...", a: "畫出紅色的【火堆】驅趕牠們！" },
+            { q: "【第二關】", t: "天黑了，狼群在靠近...", a: "畫出【火堆】或【火把】驅趕牠們！" },
             { q: "【第三關】", t: "前方出現百米深的大裂谷！", a: "畫出【翅膀】或【長橋】通過吧！" },
             { q: "【第四關】", t: "原始人部落想看你的寶物...", a: "畫出你從現代帶來的【神奇物品】！" },
             { q: "【最終關】", t: "時空裂縫出現了！", a: "快畫出【時光機】或是【傳送門】回家！" }
         ];
 
-        // 切換畫筆與顏色
         function setBrush(color, size, el) {
             currentColor = color;
             currentSize = size;
@@ -167,8 +165,8 @@
             document.querySelector('.toolbar').style.visibility = "hidden";
             eventText.innerHTML = `
                 <b style="color:#00ff00; font-size:1.3em;">🌀 穿越成功！</b><br><br>
-                你帶著滿滿的「戰利品」回到了現代。<br><br>
-                這幅壁畫證明了你在十萬年前的傳奇冒險！
+                你帶著滿滿的戰利品回到了現代。<br><br>
+                看著左邊的壁畫，這真是一場偉大的冒險！
             `;
             actionBtn.innerText = "重啟冒險";
             actionBtn.onclick = () => location.reload();
