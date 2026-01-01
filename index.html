@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>十萬年前：最終冒險</title>
+    <title>十萬年前：永恆的火柴人</title>
     <style>
         body {
             background: radial-gradient(circle, #4e3b2c 0%, #1a120b 100%);
@@ -13,28 +13,23 @@
         #game-container {
             background: rgba(0, 0, 0, 0.6); padding: 30px; border-radius: 20px; border: 4px solid #8b7355;
             display: flex; flex-direction: row; gap: 30px; max-width: 1000px; width: 90%;
-            box-shadow: 0 0 50px rgba(0,0,0,0.8);
         }
-        .canvas-section { flex: 1.2; position: relative; }
+        .canvas-section { flex: 1.2; }
         canvas {
-            background: #e6d5b8; border: 10px solid #3d2b1f; border-radius: 10px;
+            background: #e6d5b8; border: 8px solid #3d2b1f; border-radius: 10px;
             cursor: crosshair; display: block; width: 100%; height: auto; touch-action: none;
         }
-        .info-section { flex: 0.8; display: flex; flex-direction: column; justify-content: space-between; text-align: left; }
-        h1 { margin-top: 0; color: #ffa500; font-size: 1.8em; text-shadow: 2px 2px #000; }
+        .info-section { flex: 0.8; display: flex; flex-direction: column; justify-content: space-between; }
+        h1 { margin: 0; color: #ffa500; font-size: 1.8em; }
         #event-display {
             background: rgba(255, 255, 255, 0.1); padding: 20px; border-radius: 10px;
-            border-left: 5px solid #ffa500; font-size: 1.1em; line-height: 1.6; min-height: 200px;
+            border-left: 5px solid #ffa500; font-size: 1.1em; min-height: 220px;
         }
         .controls { display: flex; gap: 15px; margin-top: 20px; }
-        .btn {
-            flex: 1; padding: 15px 10px; font-size: 1.1em; border: none; border-radius: 8px;
-            cursor: pointer; font-weight: bold; transition: 0.2s;
-        }
-        .btn-primary { background: #d2691e; color: white; box-shadow: 0 4px #8b4513; }
-        .btn-primary:active { transform: translateY(4px); box-shadow: none; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .btn-primary { background: #d2691e; color: white; }
         .btn-secondary { background: #555; color: #eee; }
-        @media (max-width: 800px) { #game-container { flex-direction: column; } canvas { height: 300px; } }
+        @media (max-width: 800px) { #game-container { flex-direction: column; } }
     </style>
 </head>
 <body>
@@ -46,16 +41,16 @@
 
         <div class="info-section">
             <header>
-                <h1>🦴 洞穴手記：最終章</h1>
-                <p id="progress-tag">進度：冒險準備中</p>
+                <h1 id="title">🦴 洞穴手記</h1>
+                <p id="progress-tag">進度：召喚英雄</p>
             </header>
             
             <div id="event-display">
-                <p id="event-text">【序章】<br>你醒來發現自己躺在山洞裡...<br><br><strong>請在左側畫出你的「火柴人英雄」。</strong></p>
+                <p id="event-text">【序章】<br>你醒來發現自己躺在山洞裡...<br><br><strong>請先畫出你的「火柴人英雄」。</strong><br>(畫完後他將陪伴你全程！)</p>
             </div>
 
             <div class="controls">
-                <button class="btn btn-secondary" onclick="clearCanvas()">擦掉</button>
+                <button class="btn btn-secondary" onclick="clearCurrentOnly()">擦掉本次</button>
                 <button class="btn btn-primary" id="actionBtn" onclick="handleAction()">我畫好了</button>
             </div>
         </div>
@@ -69,33 +64,39 @@
         const progressTag = document.getElementById('progress-tag');
 
         let painting = false;
-        let eventIndex = -1; // -1 是畫主角，0-4 是事件，5 是結局
+        let step = 0; // 0:序章, 1-4:冒險, 5:時光機, 6:結局
         
-        // 固定的冒險流程（不會重複）
+        // 離屏畫布：用來保存每一階段確定的圖案
+        const saveCanvas = document.createElement('canvas');
+        saveCanvas.width = 500; saveCanvas.height = 500;
+        const saveCtx = saveCanvas.getContext('2d');
+
         const adventureList = [
-            { q: "【事件一】前方出現一頭憤怒的猛瑪象！", a: "快畫出一個【深坑陷阱】或是【長矛】！" },
-            { q: "【事件二】黑夜降臨，附近的狼群開始嚎叫...", a: "畫出【火堆】或是【火把】來驅趕牠們！" },
-            { q: "【事件三】前方山路崩塌，露出寬廣的大裂谷！", a: "畫出【長梯】或是【繩索】爬過去！" },
-            { q: "【事件四】你遇到一群原始人，他們看起來想交換東西...", a: "畫出【一條大魚】或是【亮晶晶的寶石】！" },
-            { q: "【事件五】天空中出現神祕的裂縫，這可能是回家的機會！", a: "快！畫出【時光機】或是【傳送門】！" }
+            { q: "【第一關】", t: "一頭猛瑪象衝過來了！", a: "在英雄身邊畫出【長矛】或【陷阱】！" },
+            { q: "【第二關】", t: "天黑了，狼群在靠近...", a: "在英雄身邊畫出【火堆】或【火把】！" },
+            { q: "【第三關】", t: "前方出現百米深的大裂谷！", a: "畫出【翅膀】或【長橋】讓英雄通過！" },
+            { q: "【第四關】", t: "原始人部落想看你的寶物...", a: "畫出【金幣】或【手機】嚇壞他們！" },
+            { q: "【最終關】", t: "時空裂縫出現了！", a: "快畫出【時光機】或是【任意門】回家！" }
         ];
 
         function getPos(e) {
             const rect = canvas.getBoundingClientRect();
-            const scaleX = canvas.width / rect.width;
-            const scaleY = canvas.height / rect.height;
             let cx = e.touches ? e.touches[0].clientX : e.clientX;
             let cy = e.touches ? e.touches[0].clientY : e.clientY;
-            return { x: (cx - rect.left) * scaleX, y: (cy - rect.top) * scaleY };
+            return {
+                x: (cx - rect.left) * (canvas.width / rect.width),
+                y: (cy - rect.top) * (canvas.height / rect.height)
+            };
         }
 
         function startPosition(e) { painting = true; draw(e); }
         function finishedPosition() { painting = false; ctx.beginPath(); }
+        
         function draw(e) {
             if (!painting) return;
             e.preventDefault();
             const pos = getPos(e);
-            ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.strokeStyle = '#2b1d12';
+            ctx.lineWidth = 5; ctx.lineCap = 'round'; ctx.strokeStyle = '#2b1d12';
             ctx.lineTo(pos.x, pos.y); ctx.stroke();
             ctx.beginPath(); ctx.moveTo(pos.x, pos.y);
         }
@@ -107,37 +108,41 @@
         canvas.addEventListener('touchmove', draw);
         canvas.addEventListener('touchend', finishedPosition);
 
-        function clearCanvas() { ctx.clearRect(0, 0, canvas.width, canvas.height); }
+        // 「擦掉本次」只會回到該階段剛開始的樣子（保留之前的火柴人）
+        function clearCurrentOnly() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.drawImage(saveCanvas, 0, 0);
+        }
 
         function handleAction() {
-            if (eventIndex < adventureList.length - 1) {
-                // 如果還在冒險中或剛畫完主角
-                eventIndex++;
-                const ev = adventureList[eventIndex];
-                clearCanvas();
-                progressTag.innerText = `冒險進度：${eventIndex + 1} / 5`;
-                eventText.innerHTML = `<span style="color:#ffa500; font-weight:bold;">${ev.q}</span><br><br>${ev.a}`;
-                actionBtn.innerText = (eventIndex === 4) ? "啟動並回家！" : "我畫好了";
+            // 先保存當前畫面到「永恆畫布」
+            saveCtx.clearRect(0, 0, 500, 500);
+            saveCtx.drawImage(canvas, 0, 0);
+
+            if (step < 5) {
+                const ev = adventureList[step];
+                progressTag.innerText = `冒險進度：${step + 1} / 5`;
+                eventText.innerHTML = `<b style="color:#ffa500; font-size:1.2em;">${ev.q} ${ev.t}</b><br><br>${ev.a}`;
+                actionBtn.innerText = (step === 4) ? "發動時光機！" : "解決難題！";
+                step++;
             } else {
-                // 最後結局
                 showEnding();
             }
         }
 
         function showEnding() {
-            clearCanvas();
-            canvas.style.display = "none";
-            progressTag.innerText = "冒險達成！";
+            progressTag.innerText = "結局：回到現代";
             eventText.innerHTML = `
-                <span style="color:#00ff00; font-size:1.5em; font-weight:bold;">🌀 穿越成功！</span><br><br>
-                隨著時光機閃爍著強光，你感覺一陣暈眩...<br><br>
-                當你再次睜開眼，你已經回到了現代的房間裡，桌上還放著你剛剛畫畫的電腦。<br><br>
-                <strong>這是一場夢嗎？你看了看手掌心，上面還殘留著十萬年前的黑炭...</strong>
+                <b style="color:#00ff00; font-size:1.3em;">🌀 成功通關！</b><br><br>
+                你的英雄帶著所有裝備跳進了時光機！<br><br>
+                白光閃過...你回到了2026年。<br>
+                左側是你剛才奮力求生的「壁畫證據」。
             `;
-            actionBtn.innerText = "重新開始冒險";
+            actionBtn.innerText = "再次轉生";
             actionBtn.onclick = () => location.reload();
             document.querySelector('.btn-secondary').style.display = "none";
         }
     </script>
 </body>
 </html>
+           
