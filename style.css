@@ -1,68 +1,84 @@
-/* 基礎背景：岩石質感 */
 body {
-    background: radial-gradient(circle, #5e4b3c 0%, #2b1d12 100%);
+    background: radial-gradient(circle, #4e3b2c 0%, #1a120b 100%);
     margin: 0;
     height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Noto Sans TC', sans-serif;
+    font-family: '微軟正黑體', sans-serif;
     color: #f4e4bc;
-    overflow: hidden;
-}
-
-/* 洞穴邊緣陰影 */
-.cave-overlay {
-    position: fixed;
-    top: 0; left: 0; width: 100%; height: 100%;
-    box-shadow: inset 0 0 200px rgba(0,0,0,0.8);
-    pointer-events: none;
 }
 
 #game-container {
-    background: rgba(255, 255, 255, 0.05);
-    padding: 30px;
-    border-radius: 20px;
-    backdrop-filter: blur(5px);
-    border: 2px solid #8b7355;
-    z-index: 10;
-    width: 90%;
-    max-width: 600px;
+    background: rgba(0, 0, 0, 0.4);
+    padding: 20px;
+    border-radius: 15px;
+    border: 3px solid #8b7355;
+    display: flex; /* 開啟左右佈局 */
+    flex-direction: row;
+    gap: 20px;
+    max-width: 900px;
+    width: 95%;
+    align-items: flex-start;
 }
 
-/* 畫布：羊皮紙/岩壁感 */
+/* 左側：畫布區域 */
+.canvas-section {
+    flex: 1;
+}
+
 canvas {
     background: #e6d5b8;
-    background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png'); /* 增加紋理 */
-    border: 8px solid #4a3728;
-    border-radius: 5px;
-    cursor: crosshair;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-    max-width: 100%;
+    background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png');
+    border: 5px solid #3d2b1f;
+    border-radius: 8px;
+    cursor: url('https://cdn-icons-png.flaticon.com/32/115/115804.png'), auto; /* 模擬炭筆游標 */
+    display: block;
 }
 
-.controls { margin-top: 20px; }
+/* 右側：控制與文字區域 */
+.info-section {
+    flex: 0.8;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    height: 400px; /* 與畫布同高 */
+    text-align: left;
+}
+
+h1 { font-size: 1.5em; color: #ffa500; border-bottom: 2px solid #8b7355; padding-bottom: 10px; }
+
+#event-display {
+    background: rgba(40, 30, 20, 0.8);
+    padding: 15px;
+    border-radius: 10px;
+    flex-grow: 1;
+    margin-bottom: 20px;
+    font-size: 1.1em;
+    line-height: 1.6;
+}
+
+.controls {
+    display: flex;
+    gap: 10px;
+}
 
 .btn {
-    padding: 12px 25px;
-    font-size: 1.1em;
+    flex: 1;
+    padding: 15px;
     border: none;
-    border-radius: 50px;
+    border-radius: 5px;
     cursor: pointer;
-    transition: 0.3s;
     font-weight: bold;
-    margin: 0 10px;
+    transition: 0.2s;
 }
 
 .btn-primary { background: #d2691e; color: white; }
-.btn-primary:hover { background: #ff7f50; transform: scale(1.05); }
+.btn-primary:hover { background: #ff7f50; }
+.btn-secondary { background: #555; color: #ccc; }
 
-.btn-secondary { background: #6b4423; color: #f4e4bc; }
-
-#event-display {
-    margin-top: 15px;
-    padding: 10px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 10px;
-    min-height: 60px;
+/* 手機適應 */
+@media (max-width: 768px) {
+    #game-container { flex-direction: column; align-items: center; }
+    .info-section { height: auto; width: 100%; }
 }
