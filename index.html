@@ -1,53 +1,31 @@
 <!DOCTYPE html>
 <html lang="zh-TW">
 <head>
-  <meta charset="UTF-8">
-  <title>養天線寶寶</title>
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>十萬年前冒險手記</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="cave-overlay"></div>
+    <div id="game-container">
+        <header>
+            <h1>🦴 PREHISTORIC DRAW 🦴</h1>
+            <p id="story-text">你穿越到了十萬年前...手裡只有一根碳化的樹枝。</p>
+        </header>
 
-<div class="money">💰 金錢：$<span id="money">30</span></div>
+        <div class="canvas-area">
+            <canvas id="paintCanvas" width="500" height="400"></canvas>
+            <div id="event-display">
+                <p id="event-text">【序章】請先畫出你的火柴人英雄，然後按下開始！</p>
+            </div>
+        </div>
 
-<div class="room">
-  <!-- 天線寶寶（純 CSS） -->
-  <div id="pet" class="pet normal">
-    <div class="antenna"></div>
-    <div class="head">
-      <div class="eye left"></div>
-      <div class="eye right"></div>
-      <div class="mouth"></div>
+        <div class="controls">
+            <button class="btn btn-secondary" onclick="clearCanvas()">抹除塗鴉</button>
+            <button class="btn btn-primary" id="actionBtn" onclick="handleAction()">我畫好了，出發！</button>
+        </div>
     </div>
-    <div class="body"></div>
-  </div>
-
-  <!-- 家具 -->
-  <div class="window"></div>
-  <div class="bed"></div>
-  <div class="table"></div>
-  <div class="rug"></div>
-</div>
-
-<div class="panel">
-  <h3>🍽️ 餵食</h3>
-  <button onclick="feed(5, 'pineapple')">🍍 鳳梨 $5</button>
-  <button onclick="feed(15, 'noodle')">🍜 鐵板麵 $15</button>
-  <button onclick="feed(15, 'takoyaki')">🐙 章魚燒 $15</button>
-  <button onclick="feed(10, 'sprite')">🥤 雪碧 $10</button>
-  <button onclick="feed(20, 'tiramisu')">🍰 提拉米蘇 $20</button>
-  <button onclick="feed(10, 'dumpling')">🥟 水餃 $10</button>
-</div>
-
-<div class="panel">
-  <h3>👕 換衣服</h3>
-  <button onclick="changeClothes('normal')">日常</button>
-  <button onclick="changeClothes('blue')">藍色</button>
-  <button onclick="changeClothes('pink')">粉色</button>
-  <button onclick="changeClothes('yellow')">黃色</button>
-</div>
-
-<div class="game-icon" onclick="openGame()">🎮</div>
-
-<script src="script.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
