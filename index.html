@@ -3,27 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>十萬年前冒險手記</title>
+    <title>十萬年前：洞穴筆記</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="cave-overlay"></div>
     <div id="game-container">
-        <header>
-            <h1>🦴 PREHISTORIC DRAW 🦴</h1>
-            <p id="story-text">你穿越到了十萬年前...手裡只有一根碳化的樹枝。</p>
-        </header>
-
-        <div class="canvas-area">
+        <div class="canvas-section">
             <canvas id="paintCanvas" width="500" height="400"></canvas>
-            <div id="event-display">
-                <p id="event-text">【序章】請先畫出你的火柴人英雄，然後按下開始！</p>
-            </div>
         </div>
 
-        <div class="controls">
-            <button class="btn btn-secondary" onclick="clearCanvas()">抹除塗鴉</button>
-            <button class="btn btn-primary" id="actionBtn" onclick="handleAction()">我畫好了，出發！</button>
+        <div class="info-section">
+            <header>
+                <h1>🦴 穿越十萬年前</h1>
+                <p>手握炭筆，畫出你的冒險...</p>
+            </header>
+            
+            <div id="event-display">
+                <p id="event-text">【序章】<br>你意外穿越到了遠古時代！請先在左邊畫出你的「火柴人英雄」。</p>
+            </div>
+
+            <div class="controls">
+                <button class="btn btn-secondary" onclick="clearCanvas()">抹除</button>
+                <button class="btn btn-primary" id="actionBtn" onclick="handleAction()">開始冒險</button>
+            </div>
         </div>
     </div>
     <script src="script.js"></script>
