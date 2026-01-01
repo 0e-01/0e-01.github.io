@@ -1,153 +1,68 @@
+/* 基礎背景：岩石質感 */
 body {
-  font-family: sans-serif;
-  background: #eaf7ff;
-  text-align: center;
+    background: radial-gradient(circle, #5e4b3c 0%, #2b1d12 100%);
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Noto Sans TC', sans-serif;
+    color: #f4e4bc;
+    overflow: hidden;
 }
 
-.money {
-  font-size: 20px;
-  margin: 10px;
+/* 洞穴邊緣陰影 */
+.cave-overlay {
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    box-shadow: inset 0 0 200px rgba(0,0,0,0.8);
+    pointer-events: none;
 }
 
-.room {
-  width: 380px;
-  height: 300px;
-  background: #fff;
-  border: 3px solid #333;
-  margin: auto;
-  position: relative;
+#game-container {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 30px;
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+    border: 2px solid #8b7355;
+    z-index: 10;
+    width: 90%;
+    max-width: 600px;
 }
 
-/* ===== 天線寶寶 ===== */
-.pet {
-  position: absolute;
-  left: 150px;
-  top: 70px;
+/* 畫布：羊皮紙/岩壁感 */
+canvas {
+    background: #e6d5b8;
+    background-image: url('https://www.transparenttextures.com/patterns/pinstriped-suit.png'); /* 增加紋理 */
+    border: 8px solid #4a3728;
+    border-radius: 5px;
+    cursor: crosshair;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    max-width: 100%;
 }
 
-/* 天線 */
-.antenna {
-  width: 6px;
-  height: 30px;
-  background: #333;
-  margin: auto;
-  border-radius: 5px;
+.controls { margin-top: 20px; }
+
+.btn {
+    padding: 12px 25px;
+    font-size: 1.1em;
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+    font-weight: bold;
+    margin: 0 10px;
 }
 
-/* 頭 */
-.head {
-  width: 60px;
-  height: 55px;
-  background: #8fd694;
-  border-radius: 50%;
-  position: relative;
-  margin: auto;
-}
+.btn-primary { background: #d2691e; color: white; }
+.btn-primary:hover { background: #ff7f50; transform: scale(1.05); }
 
-/* 眼睛 */
-.eye {
-  width: 8px;
-  height: 8px;
-  background: #000;
-  border-radius: 50%;
-  position: absolute;
-  top: 18px;
-}
-.eye.left { left: 16px; }
-.eye.right { right: 16px; }
+.btn-secondary { background: #6b4423; color: #f4e4bc; }
 
-/* 嘴巴 */
-.mouth {
-  width: 18px;
-  height: 10px;
-  border-bottom: 3px solid #333;
-  border-radius: 0 0 20px 20px;
-  position: absolute;
-  top: 32px;
-  left: 21px;
-}
-
-/* 身體 */
-.body {
-  width: 70px;
-  height: 70px;
-  background: #8fd694;
-  border-radius: 35px;
-  margin: -5px auto 0;
-}
-
-/* 衣服顏色 */
-.normal .head,
-.normal .body { background: #8fd694; }
-
-.blue .head,
-.blue .body { background: #6fa8dc; }
-
-.pink .head,
-.pink .body { background: #f4cccc; }
-
-.yellow .head,
-.yellow .body { background: #ffd966; }
-
-/* ===== 家具 ===== */
-/* 窗戶 */
-.window {
-  width: 60px;
-  height: 40px;
-  border: 3px solid #333;
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  background: linear-gradient(#cfe2f3 50%, #9fc5e8 50%);
-}
-
-/* 床 */
-.bed {
-  width: 120px;
-  height: 40px;
-  border: 3px solid #333;
-  position: absolute;
-  bottom: 20px;
-  left: 20px;
-  background: #fce5cd;
-}
-
-/* 桌子 */
-.table {
-  width: 60px;
-  height: 35px;
-  border: 3px solid #333;
-  position: absolute;
-  bottom: 20px;
-  right: 30px;
-  background: #ead1dc;
-}
-
-/* 地毯 */
-.rug {
-  width: 100px;
-  height: 40px;
-  background: #d9ead3;
-  border-radius: 20px;
-  position: absolute;
-  bottom: 10px;
-  left: 140px;
-}
-
-/* 面板 */
-.panel {
-  margin-top: 10px;
-}
-
-button {
-  margin: 4px;
-}
-
-/* 遊戲圖示 */
-.game-icon {
-  position: fixed;
-  right: 20px;
-  bottom: 20px;
-  font-size: 40px;
-  cursor: pointer;
+#event-display {
+    margin-top: 15px;
+    padding: 10px;
+    background: rgba(0,0,0,0.3);
+    border-radius: 10px;
+    min-height: 60px;
 }
