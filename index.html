@@ -3,31 +3,222 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>十萬年前：洞穴筆記</title>
-    <link rel="stylesheet" href="style.css">
+    <title>十萬年前：洞穴冒險</title>
+    <style>
+        /* 全域樣式 */
+        body {
+            background: radial-gradient(circle, #4e3b2c 0%, #1a120b 100%);
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: "PingFang TC", "Microsoft JhengHei", sans-serif;
+            color: #f4e4bc;
+            overflow: hidden;
+        }
+
+        /* 遊戲容器：強制左右排列 */
+        #game-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 30px;
+            border-radius: 20px;
+            border: 4px solid #8b7355;
+            display: flex; 
+            flex-direction: row; /* 關鍵：左右排列 */
+            gap: 30px;
+            max-width: 1000px;
+            width: 90%;
+            box-shadow: 0 0 50px rgba(0,0,0,0.8);
+        }
+
+        /* 左側：畫板區 */
+        .canvas-section {
+            flex: 1.2;
+            position: relative;
+        }
+
+        canvas {
+            background: #e6d5b8;
+            border: 10px solid #3d2b1f;
+            border-radius: 10px;
+            cursor: crosshair;
+            display: block;
+            width: 100%; /* 適應容器寬度 */
+            height: auto;
+            touch-action: none; /* 防止手機捲動干擾畫圖 */
+        }
+
+        /* 右側：文字與按鈕區 */
+        .info-section {
+            flex: 0.8;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            text-align: left;
+        }
+
+        h1 { margin-top: 0; color: #ffa500; font-size: 2em; text-shadow: 2px 2px #000; }
+
+        #event-display {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 5px solid #ffa500;
+            font-size: 1.2em;
+            line-height: 1.6;
+            min-height: 150px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 15px 10px;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s, background 0.2s;
+        }
+
+        .btn-primary { background: #d2691e; color: white; box-shadow: 0 4px #8b4513; }
+        .btn-primary:active { transform: translateY(4px); box-shadow: none; }
+        
+        .btn-secondary { background: #555; color: #eee; }
+
+        /* 手機模式自動切換回上下排列 */
+        @media (max-width: 800px) {
+            #game-container { flex-direction: column; height: auto; overflow-y: auto; }
+            canvas { height: 300px; }
+        }
+    </style>
 </head>
 <body>
+
     <div id="game-container">
         <div class="canvas-section">
-            <canvas id="paintCanvas" width="500" height="400"></canvas>
+            <canvas id="paintCanvas" width="500" height="500"></canvas>
         </div>
 
         <div class="info-section">
             <header>
-                <h1>🦴 穿越十萬年前</h1>
-                <p>手握炭筆，畫出你的冒險...</p>
+                <h1>🦴 洞穴手記</h1>
+                <p>穿越時空：十萬年前的荒野</p>
             </header>
             
             <div id="event-display">
-                <p id="event-text">【序章】<br>你意外穿越到了遠古時代！請先在左邊畫出你的「火柴人英雄」。</p>
+                <p id="event-text">【序章】<br>你醒來發現自己躺在山洞裡...<br><br><strong>請在左側畫出你的火柴人化身。</strong></p>
             </div>
 
             <div class="controls">
-                <button class="btn btn-secondary" onclick="clearCanvas()">抹除</button>
-                <button class="btn btn-primary" id="actionBtn" onclick="handleAction()">開始冒險</button>
+                <button class="btn btn-secondary" onclick="clearCanvas()">擦掉</button>
+                <button class="btn btn-primary" id="actionBtn" onclick="handleAction()">我畫好了</button>
             </div>
         </div>
     </div>
-    <script src="script.js"></script>
+
+    <script>
+        const canvas = document.getElementById('paintCanvas');
+        const ctx = canvas.getContext('2d');
+        const eventText = document.getElementById('event-text');
+        const actionBtn = document.getElementById('actionBtn');
+
+        let painting = false;
+        let gameState = "start";
+
+        const adventures = [
+            { q: "【突發】前方出現一頭憤怒的猛瑪象！", a: "快畫出一個【深坑陷阱】或是【巨大的長矛】！" },
+            { q: "【突發】黑夜降臨，附近的狼群開始嚎叫...", a: "畫出【一堆火】或是【堅固的柵欄】！" },
+            { q: "【突發】你發現了牆上的神祕圖騰，需要祭品...", a: "畫出【一條魚】或是【奇異果實】來獻祭！" },
+            { q: "【突發】前方山路崩塌，露出大裂谷！", a: "畫出【一條繩索】或是【長梯子】爬過去！" }
+        ];
+
+        // 修正後的座標計算函數
+        function getPos(e) {
+            const rect = canvas.getBoundingClientRect();
+            // 考慮到 CSS 縮放，計算正確比例
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            
+            let clientX, clientY;
+            if (e.touches) {
+                clientX = e.touches[0].clientX;
+                clientY = e.touches[0].clientY;
+            } else {
+                clientX = e.clientX;
+                clientY = e.clientY;
+            }
+            
+            return {
+                x: (clientX - rect.left) * scaleX,
+                y: (clientY - rect.top) * scaleY
+            };
+        }
+
+        function startPosition(e) {
+            painting = true;
+            draw(e);
+        }
+
+        function finishedPosition() {
+            painting = false;
+            ctx.beginPath();
+        }
+
+        function draw(e) {
+            if (!painting) return;
+            e.preventDefault();
+            
+            const pos = getPos(e);
+
+            ctx.lineWidth = 6;
+            ctx.lineCap = 'round';
+            ctx.strokeStyle = '#2b1d12';
+
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+
+        // 滑鼠監聽
+        canvas.addEventListener('mousedown', startPosition);
+        canvas.addEventListener('mousemove', draw);
+        window.addEventListener('mouseup', finishedPosition);
+
+        // 觸控監聽
+        canvas.addEventListener('touchstart', startPosition);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', finishedPosition);
+
+        function clearCanvas() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+        }
+
+        function handleAction() {
+            if (gameState === "start" || gameState === "result") {
+                triggerNewEvent();
+            } else if (gameState === "adventure") {
+                const results = ["奇蹟發生了！你的畫作變成了實體！", "雖然畫得有點醜，但居然奏效了！", "靠著這個工具，你順利化險為夷。"];
+                eventText.innerHTML = `<span style="color:#00ff00">✔ 成功生存！</span><br><br>${results[Math.floor(Math.random()*results.length)]}`;
+                actionBtn.innerText = "繼續前行";
+                gameState = "result";
+            }
+        }
+
+        function triggerNewEvent() {
+            clearCanvas();
+            const ev = adventures[Math.floor(Math.random() * adventures.length)];
+            eventText.innerHTML = `<span style="color:#ffa500; font-weight:bold;">${ev.q}</span><br><br>${ev.a}`;
+            actionBtn.innerText = "畫好了，解決它！";
+            gameState = "adventure";
+        }
+    </script>
 </body>
 </html>
